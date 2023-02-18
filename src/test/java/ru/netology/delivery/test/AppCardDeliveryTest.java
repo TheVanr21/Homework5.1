@@ -41,30 +41,14 @@ class AppCardDeliveryTest {
         secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
 
         //First registration
-        $("[data-test-id='city'] input").setValue(city);
-        $("[data-test-id='date'] input").click();
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        $("[data-test-id='date'] input").sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id='date'] input").setValue(firstMeetingDate);
-        $("[data-test-id='name'] input").setValue(name);
-        $("[data-test-id='phone'] input").setValue(phone);
-        $("[data-test-id='agreement']").click();
-        $$("button").find(Condition.exactText("Запланировать")).click();
+        register(firstMeetingDate);
 
         $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate), Condition.visible);
 
         refresh();
 
         //Second registration
-        $("[data-test-id='city'] input").setValue(city);
-        $("[data-test-id='date'] input").click();
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        $("[data-test-id='date'] input").sendKeys(Keys.BACK_SPACE);
-        $("[data-test-id='date'] input").setValue(secondMeetingDate);
-        $("[data-test-id='name'] input").setValue(name);
-        $("[data-test-id='phone'] input").setValue(phone);
-        $("[data-test-id='agreement']").click();
-        $$("button").find(Condition.exactText("Запланировать")).click();
+        register(secondMeetingDate);
 
         $("[data-test-id='replan-notification'] .notification__content").shouldHave(Condition.text("У вас уже запланирована встреча на другую дату. Перепланировать?"), Condition.visible);
 
@@ -72,5 +56,19 @@ class AppCardDeliveryTest {
         $("[data-test-id='replan-notification'] button").click();
 
         $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate), Condition.visible);
+
+
+    }
+
+    void register (String date){
+        $("[data-test-id='city'] input").setValue(city);
+        $("[data-test-id='date'] input").click();
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        $("[data-test-id='date'] input").sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id='date'] input").setValue(date);
+        $("[data-test-id='name'] input").setValue(name);
+        $("[data-test-id='phone'] input").setValue(phone);
+        $("[data-test-id='agreement']").click();
+        $$("button").find(Condition.exactText("Запланировать")).click();
     }
 }
