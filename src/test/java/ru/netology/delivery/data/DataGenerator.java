@@ -16,7 +16,7 @@ public class DataGenerator {
         return date;
     }
 
-    public static String generateCity(String locale) {
+    public static String generateCity() {
         String[] validCities = {
                 "Абакан",
                 "Анадырь",
@@ -124,7 +124,7 @@ public class DataGenerator {
         }
 
         public static UserInfo generateUser(String locale) {
-            UserInfo user = new UserInfo(generateCity(locale), generateName(locale), generatePhone(locale));
+            UserInfo user = new UserInfo(generateCity(), generateName(locale), generatePhone(locale));
             return user;
         }
     }
