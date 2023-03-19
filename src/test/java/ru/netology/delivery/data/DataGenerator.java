@@ -13,8 +13,7 @@ public class DataGenerator {
     }
 
     public static String generateDate(int shift) {
-        String date = LocalDate.now().plusDays(shift).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        return date;
+        return LocalDate.now().plusDays(shift).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
     public static String generateCity() {
@@ -103,21 +102,17 @@ public class DataGenerator {
                 "Якутск",
                 "Ярославль"
         };
-        Random rand = new Random();
-        String city = validCities[rand.nextInt(validCities.length)];
-        return city;
+        return validCities[new Random().nextInt(validCities.length)];
     }
 
     public static String generateName(String locale) {
         Faker faker = new Faker(new Locale(locale));
-        String name = faker.name().lastName() + " " + faker.name().firstName();
-        return name;
+        return faker.name().lastName() + " " + faker.name().firstName();
     }
 
     public static String generatePhone(String locale) {
         Faker faker = new Faker(new Locale(locale));
-        String phone = faker.phoneNumber().phoneNumber().replaceAll("[()-]", "");
-        return phone;
+        return faker.phoneNumber().phoneNumber().replaceAll("[()-]", "");
     }
 
     public static class Registration {
@@ -125,8 +120,7 @@ public class DataGenerator {
         }
 
         public static UserInfo generateUser(String locale) {
-            UserInfo user = new UserInfo(generateCity(), generateName(locale), generatePhone(locale));
-            return user;
+            return new UserInfo(generateCity(), generateName(locale), generatePhone(locale));
         }
     }
 

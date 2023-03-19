@@ -42,25 +42,23 @@ class AppCardDeliveryTest {
 
         //First registration
         register(firstMeetingDate);
-
-        $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate), Condition.visible);
-
+        $("[data-test-id='success-notification'] .notification__content")
+                .shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate), Condition.visible);
         refresh();
 
         //Second registration
         register(secondMeetingDate);
-
-        $("[data-test-id='replan-notification'] .notification__content").shouldHave(Condition.text("У вас уже запланирована встреча на другую дату. Перепланировать?"), Condition.visible);
+        $("[data-test-id='replan-notification'] .notification__content")
+                .shouldHave(Condition.text("У вас уже запланирована встреча на другую дату. Перепланировать?"), Condition.visible);
 
         //Replan
         $("[data-test-id='replan-notification'] button").click();
-
         $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate), Condition.visible);
 
 
     }
 
-    void register (String date){
+    void register(String date) {
         $("[data-test-id='city'] input").setValue(city);
         $("[data-test-id='date'] input").click();
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a"));
