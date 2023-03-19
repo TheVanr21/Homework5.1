@@ -1,9 +1,9 @@
 package ru.netology.delivery.test;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.Keys;
 import ru.netology.delivery.data.DataGenerator;
 
@@ -20,6 +20,16 @@ class AppCardDeliveryTest {
     String phone;
     int daysToAddForFirstMeeting;
     int daysToAddForSecondMeeting;
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
 
     @BeforeEach
     void setup() {
@@ -56,6 +66,31 @@ class AppCardDeliveryTest {
         $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate), Condition.visible);
 
 
+    }
+
+    @Test
+    @DisplayName("Should plan and replan meeting on today") //not valid test on purpose
+    void shouldSuccessfulPlanAndReplanMeetingToday() {
+        //Setup days
+        daysToAddForFirstMeeting = 4;
+        daysToAddForSecondMeeting = 0;
+        firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
+        secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
+
+        //First registration
+        register(firstMeetingDate);
+        $("[data-test-id='success-notification'] .notification__content")
+                .shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate), Condition.visible);
+        refresh();
+
+        //Second registration
+        register(secondMeetingDate);
+        $("[data-test-id='replan-notification'] .notification__content")
+                .shouldHave(Condition.text("У вас уже запланирована встреча на другую дату. Перепланировать?"), Condition.visible);
+
+        //Replan
+        $("[data-test-id='replan-notification'] button").click();
+        $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate), Condition.visible);
     }
 
     void register(String date) {
